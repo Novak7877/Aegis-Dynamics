@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegis Dynamics — Programs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10141a;
+    --bg-alt: #141a22;
+    --panel: #171e27;
+    --steel: #3d4a5c;
+    --steel-light: #7186a0;
+    --accent: #4f9bb8;
+    --accent-dim: #326579;
+    --text: #e7eaee;
+    --text-muted: #8b95a3;
+    --line: #232b37;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+  }
+  h1,h2,h3,.brand{
+    font-family:'Big Shoulders Display', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    font-weight:700;
+    color:var(--text);
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(16,20,26,0.94);
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(4px);
+  }
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 0;
+  }
+  .brand{
+    display:flex;align-items:center;gap:12px;
+    font-size:22px;letter-spacing:0.06em;
+  }
+  .brand .mark{
+    width:24px;height:24px;
+    position:relative;
+    flex-shrink:0;
+  }
+  .brand .mark::before, .brand .mark::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border:2px solid var(--accent);
+    transform:rotate(45deg);
+  }
+  .brand .mark::after{
+    inset:6px;
+    border-color:var(--steel-light);
+  }
+  nav.links{display:flex;gap:36px;}
+  nav.links a{
+    font-size:13px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    font-weight:500;
+    transition:color .15s ease;
+  }
+  nav.links a:hover{color:var(--accent);}
+  nav.links a.current{color:var(--accent);}
+
+  .hero{
+    padding:80px 0 60px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.12em;
+    color:var(--accent);
+    margin-bottom:22px;
+  }
+  .hero h1{font-size:52px;line-height:1;max-width:700px;margin-bottom:20px;}
+  .hero p{max-width:560px;color:var(--text-muted);font-size:16px;}
+
+  .marquee-row{
+    border-bottom:1px solid var(--line);
+    background:var(--bg-alt);
+    overflow:hidden;
+    padding:14px 0;
+  }
+  .marquee-row.alt{background:var(--panel);}
+  .marquee-track{
+    display:flex;
+    width:max-content;
+    animation:scroll-left 42s linear infinite;
+  }
+  .marquee-row.alt .marquee-track{
+    animation:scroll-right 52s linear infinite;
+  }
+  .marquee-track span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.06em;
+    color:var(--text-muted);
+    padding:0 28px;
+    white-space:nowrap;
+    border-right:1px solid var(--line);
+  }
+  .marquee-track span b{color:var(--accent);font-weight:500;}
+  @keyframes scroll-left{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  @keyframes scroll-right{
+    from{transform:translateX(-50%);}
+    to{transform:translateX(0);}
+  }
+
+  .filters{
+    display:flex;gap:10px;flex-wrap:wrap;
+    padding:36px 0 0;
+  }
+  .filter-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    border:1px solid var(--line);
+    padding:8px 14px;
+    cursor:pointer;
+    background:none;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .filter-tag:hover{color:var(--text);}
+  .filter-tag.active{color:var(--accent);border-color:var(--accent-dim);}
+
+  .programs{
+    padding:40px 0 100px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-top:8px;
+  }
+  .prog-card{
+    background:var(--panel);
+    padding:34px;
+    display:flex;
+    gap:26px;
+  }
+  .prog-icon{
+    flex-shrink:0;
+    width:64px;height:64px;
+  }
+  .prog-body{flex:1;}
+  .prog-cat{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--accent-dim);
+    margin-bottom:8px;
+  }
+  .prog-body h3{font-size:20px;line-height:1.15;margin-bottom:10px;letter-spacing:0.01em;}
+  .prog-body p{font-size:13.5px;color:var(--text-muted);margin-bottom:16px;}
+  .prog-meta{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-top:1px solid var(--line);
+    padding-top:14px;
+  }
+  .prog-price{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-size:20px;
+    color:var(--accent);
+    font-weight:600;
+  }
+  .prog-price small{
+    font-size:12px;color:var(--text-muted);
+    font-family:'IBM Plex Sans',sans-serif;font-weight:400;
+    text-transform:none;letter-spacing:0;
+  }
+  .prog-status{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+  }
+
+  footer{padding:48px 0;border-top:1px solid var(--line);}
+  .foot-row{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:12px;color:var(--text-muted);
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  .btn{
+    display:inline-block;
+    padding:14px 28px;
+    font-size:13px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    font-weight:600;
+    border:1px solid var(--accent);
+  }
+  .btn-solid{background:var(--accent);color:#0d1116;}
+
+  .stats-band{
+    border-bottom:1px solid var(--line);
+    background:var(--bg-alt);
+  }
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    padding:48px 32px;
+  }
+  .stat-item{padding:0 24px;border-left:1px solid var(--line);}
+  .stat-item:first-child{border-left:none;padding-left:0;}
+  .stat-num{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-size:38px;font-weight:700;color:var(--accent);
+    line-height:1;margin-bottom:8px;
+  }
+  .stat-label{
+    font-size:12px;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--text-muted);
+  }
+
+  .process{padding:96px 0;border-bottom:1px solid var(--line);}
+  .section-head{margin-bottom:52px;max-width:640px;}
+  .section-head h2{font-size:34px;margin-bottom:14px;}
+  .section-head p.muted{color:var(--text-muted);font-size:14px;}
+  .process-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .process-step{background:var(--panel);padding:30px 26px;}
+  .step-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;color:var(--accent-dim);margin-bottom:16px;
+  }
+  .process-step h3{font-size:16px;margin-bottom:10px;letter-spacing:0.01em;}
+  .process-step p{font-size:13px;color:var(--text-muted);}
+
+  .cta-band{
+    background:var(--steel);
+    padding:64px 0;
+  }
+  .cta-inner{text-align:center;max-width:600px;margin:0 auto;}
+  .cta-inner h2{font-size:30px;color:#f2f3f5;margin-bottom:14px;}
+  .cta-inner p{color:#c7ced8;font-size:14px;margin-bottom:26px;}
+  .cta-inner .btn-solid{color:#0d1116;}
+
+  @media (max-width:860px){
+    nav.links{display:none;}
+    .hero h1{font-size:36px;}
+    .grid{grid-template-columns:1fr;}
+    .prog-card{flex-direction:column;}
+    .foot-row{flex-direction:column;gap:10px;align-items:flex-start;}
+    .stats-grid{grid-template-columns:repeat(2,1fr);gap:24px 0;}
+    .stat-item{border-left:none;border-top:1px solid var(--line);padding:20px 0 0;}
+    .process-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="brand">
+      <span class="mark"></span>
+      <span>AEGIS DYNAMICS</span>
+    </a>
+    <nav class="links">
+      <a href="index.html#sectors">Sectors</a>
+      <a href="index.html#subsidiaries">Subsidiaries</a>
+      <a href="index.html#about">About</a>
+      <a href="programs.html" class="current">Programs</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">ACTIVE &amp; FIELDED PROGRAMS</div>
+    <h1>Systems currently in service.</h1>
+    <p>A selection of active Aegis Dynamics programs across armament, exoskeleton, cybersecurity, and strategic systems. Pricing reflects current-generation unit and program-level contract figures.</p>
+  </div>
+</section>
+
+<div class="marquee-row">
+  <div class="marquee-track">
+    <span><b>SENTINEL-IV</b> STRATEGIC SYSTEMS — CONTRACT AWARDED — $1.9B</span>
+    <span><b>MK-VII</b> POWERED EXOSKELETON — NOW FIELDING — 3RD GENERATION</span>
+    <span><b>HALCYON-CLASS</b> ASV — SEA TRIALS COMPLETE</span>
+    <span><b>TANTALUS</b> CYBER DEFENSE SUITE — 40+ CLIENT DEPLOYMENTS</span>
+    <span><b>LATIMER</b> INTERCEPTOR ARRAY — NATO PROCUREMENT PENDING</span>
+    <span><b>CORVID</b> LOITERING MUNITIONS — EXPORT LICENSE APPROVED</span>
+    <span><b>SENTINEL-IV</b> STRATEGIC SYSTEMS — CONTRACT AWARDED — $1.9B</span>
+    <span><b>MK-VII</b> POWERED EXOSKELETON — NOW FIELDING — 3RD GENERATION</span>
+    <span><b>HALCYON-CLASS</b> ASV — SEA TRIALS COMPLETE</span>
+    <span><b>TANTALUS</b> CYBER DEFENSE SUITE — 40+ CLIENT DEPLOYMENTS</span>
+    <span><b>LATIMER</b> INTERCEPTOR ARRAY — NATO PROCUREMENT PENDING</span>
+    <span><b>CORVID</b> LOITERING MUNITIONS — EXPORT LICENSE APPROVED</span>
+  </div>
+</div>
+<div class="marquee-row alt">
+  <div class="marquee-track">
+    <span>FERROUS POINT MODULAR ARMOR — $18,400 / UNIT</span>
+    <span>ANSGAR DIRECTED-ENERGY PLATFORM — $95M / SYSTEM</span>
+    <span>VOSS-KESSLER COMPOSITE PLATING — LICENSED TO 12 NATIONS</span>
+    <span>CORVID AVIONICS SUITE — RETROFIT PROGRAM ACTIVE</span>
+    <span>MERIDIAN AEROSTRUCTURES — NEW PRODUCTION LINE, TOULOUSE</span>
+    <span>FERROUS POINT MODULAR ARMOR — $18,400 / UNIT</span>
+    <span>ANSGAR DIRECTED-ENERGY PLATFORM — $95M / SYSTEM</span>
+    <span>VOSS-KESSLER COMPOSITE PLATING — LICENSED TO 12 NATIONS</span>
+    <span>CORVID AVIONICS SUITE — RETROFIT PROGRAM ACTIVE</span>
+    <span>MERIDIAN AEROSTRUCTURES — NEW PRODUCTION LINE, TOULOUSE</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="filters" id="filters">
+    <span class="filter-tag active" data-filter="All Programs">All Programs</span>
+    <span class="filter-tag" data-filter="Armament">Armament</span>
+    <span class="filter-tag" data-filter="Exoskeleton">Exoskeleton</span>
+    <span class="filter-tag" data-filter="Cybersecurity">Cybersecurity</span>
+    <span class="filter-tag" data-filter="Strategic Deterrence">Strategic Deterrence</span>
+    <span class="filter-tag" data-filter="Naval">Naval</span>
+    <span class="filter-tag" data-filter="Emerging Systems">Emerging Systems</span>
+  </div>
+</div>
+
+<section class="programs">
+  <div class="wrap">
+    <div class="grid">
+
+      <div class="prog-card" data-category="Strategic Deterrence">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <path d="M32 4 L52 32 L32 60 L12 32 Z" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M32 18 L32 46 M20 32 L44 32" stroke="var(--steel-light)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Strategic Deterrence</div>
+          <h3>Sentinel-IV Strategic Systems Program</h3>
+          <p>Next-generation strategic deterrence platform delivered under multilateral non-proliferation and allied-treaty compliance frameworks. Full specifications available to accredited government clients only.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$1.9B <small>/ program</small></span>
+            <span class="prog-status">Contract Awarded</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Exoskeleton">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <rect x="20" y="8" width="24" height="16" rx="2" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M22 24 L18 56 M42 24 L46 56 M26 24 L26 56 M38 24 L38 56" stroke="var(--steel-light)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Exoskeleton Technologies</div>
+          <h3>Aegis MK-VII Powered Exoskeleton</h3>
+          <p>Third-generation powered exoskeleton for military and heavy-industrial applications. Full-body integration, extended field autonomy, modular payload mounts.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$3.4M <small>/ unit</small></span>
+            <span class="prog-status">Now Fielding</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Armament">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <path d="M8 32 L48 24 L56 32 L48 40 Z" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M8 32 L20 32" stroke="var(--steel-light)" stroke-width="1.5"/>
+          <circle cx="52" cy="32" r="2" fill="var(--steel-light)"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Armament</div>
+          <h3>Corvid Loitering Munition System</h3>
+          <p>Precision-guided loitering munition with extended on-station endurance. Deployable from ground, vehicle, or vertical-launch platforms.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$680K <small>/ unit</small></span>
+            <span class="prog-status">Export Approved</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Naval">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <path d="M6 38 Q32 22 58 38 L52 46 Q32 34 12 46 Z" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M28 38 L28 24 L36 24 L36 38" stroke="var(--steel-light)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Naval</div>
+          <h3>Halcyon-Class Autonomous Surface Vessel</h3>
+          <p>Unmanned surface combatant for maritime domain awareness, escort, and light strike roles. Sea trials complete across three allied navies.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$142M <small>/ vessel</small></span>
+            <span class="prog-status">Sea Trials Complete</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Cybersecurity">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="22" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M32 16 L32 32 L44 40" stroke="var(--steel-light)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Cybersecurity</div>
+          <h3>Tantalus Cyber Defense Suite</h3>
+          <p>Enterprise and government-grade network defense platform. Real-time intrusion detection, infrastructure hardening, and incident response.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$28M <small>/ year, licensed</small></span>
+            <span class="prog-status">40+ Deployments</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Strategic Deterrence">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <path d="M32 6 L32 58 M14 20 L50 20 M18 38 L46 38" stroke="var(--accent)" stroke-width="2"/>
+          <circle cx="32" cy="20" r="4" stroke="var(--steel-light)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Strategic Deterrence</div>
+          <h3>Latimer Ballistic Interceptor Array</h3>
+          <p>Layered missile defense system for national and allied airspace protection. Integrates with existing NATO-standard early-warning networks.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$2.1B <small>/ program</small></span>
+            <span class="prog-status">Procurement Pending</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Armament">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <path d="M32 8 L52 20 L52 44 L32 56 L12 44 L12 20 Z" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M32 22 L32 42 M24 32 L40 32" stroke="var(--steel-light)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Armament</div>
+          <h3>Ferrous Point Modular Body Armor</h3>
+          <p>Scalable ballistic protection platform for infantry and security personnel. Modular plate carriers rated to national procurement standards.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$18,400 <small>/ unit</small></span>
+            <span class="prog-status">In Production</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Emerging Systems">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="6" stroke="var(--accent)" stroke-width="2"/>
+          <circle cx="32" cy="32" r="16" stroke="var(--steel-light)" stroke-width="1.5"/>
+          <circle cx="32" cy="32" r="26" stroke="var(--line)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Emerging Systems</div>
+          <h3>Ansgar Directed-Energy Platform</h3>
+          <p>Ground-based directed-energy system for counter-drone and short-range air defense. Rapid engagement cycle, low per-shot operating cost.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$95M <small>/ system</small></span>
+            <span class="prog-status">Field Testing</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Armament">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <path d="M10 32 L44 14 L54 20 L54 44 L44 50 L10 32 Z" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M22 24 L22 40" stroke="var(--steel-light)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Armament</div>
+          <h3>Kestrel-IX Tactical Fighter Airframe</h3>
+          <p>Multirole fighter airframe with modular avionics bays. Compatible with allied-standard weapons integration packages and third-party sensor suites.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$89M <small>/ unit</small></span>
+            <span class="prog-status">In Production</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Armament">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <rect x="10" y="10" width="44" height="44" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M18 18 L46 46 M46 18 L18 46" stroke="var(--steel-light)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Armament</div>
+          <h3>Aegis Composite Ballistic Plating</h3>
+          <p>Lightweight composite armor plating for vehicles and fixed installations. Rated against small-arms and fragmentation threats at a fraction of legacy steel weight.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$2,800 <small>/ m²</small></span>
+            <span class="prog-status">Licensed — 12 Nations</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Cybersecurity">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <path d="M32 6 L54 16 L54 32 Q54 50 32 58 Q10 50 10 32 L10 16 Z" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M24 32 L30 38 L42 24" stroke="var(--steel-light)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Cybersecurity</div>
+          <h3>Corvid Avionics Retrofit Suite</h3>
+          <p>Secure avionics and data-link retrofit package for legacy airframes. Hardened against signal intercept and remote intrusion.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$4.2M <small>/ aircraft</small></span>
+            <span class="prog-status">Retrofit Program Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Exoskeleton">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="16" r="8" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M32 24 L32 44 M20 34 L44 34 M24 44 L20 58 M40 44 L44 58" stroke="var(--steel-light)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Exoskeleton Technologies</div>
+          <h3>Tantalus Sentry Autonomous Ground Unit</h3>
+          <p>Semi-autonomous ground unit for perimeter security and logistics support. Operates alongside MK-VII exoskeleton teams in mixed deployments.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$1.1M <small>/ unit</small></span>
+            <span class="prog-status">Field Testing</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Emerging Systems">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <path d="M32 6 L38 26 L58 26 L42 38 L48 58 L32 46 L16 58 L22 38 L6 26 L26 26 Z" stroke="var(--accent)" stroke-width="2"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Emerging Systems</div>
+          <h3>Ansgar Modular Power Cell</h3>
+          <p>High-density portable power cell for field systems, exoskeleton platforms, and forward operating bases. Rapid swap architecture.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$410K <small>/ unit</small></span>
+            <span class="prog-status">In Production</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prog-card" data-category="Naval">
+        <svg class="prog-icon" viewBox="0 0 64 64" fill="none">
+          <ellipse cx="32" cy="32" rx="24" ry="10" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M14 32 L50 32 M32 22 L32 42" stroke="var(--steel-light)" stroke-width="1.5"/>
+        </svg>
+        <div class="prog-body">
+          <div class="prog-cat">Naval</div>
+          <h3>Halcyon Submarine Sonar Suite</h3>
+          <p>Passive and active sonar array for submarine and surface-fleet integration. Extended detection range with reduced acoustic signature.</p>
+          <div class="prog-meta">
+            <span class="prog-price">$54M <small>/ unit</small></span>
+            <span class="prog-status">Now Fielding</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="stats-band">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-num">14</div>
+        <div class="stat-label">Active Programs</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">$9.2B</div>
+        <div class="stat-label">Combined Program Value</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">31</div>
+        <div class="stat-label">Client Nations</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">$1.4B</div>
+        <div class="stat-label">Annual R&amp;D Investment</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="process">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>How a program comes to market.</h2>
+      <p class="muted">From initial concept to fielded system, every Aegis Dynamics program follows the same four-stage lifecycle.</p>
+    </div>
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <h3>Concept &amp; Feasibility</h3>
+        <p>Requirements gathered from allied government partners, assessed against current technical and regulatory feasibility.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <h3>Development &amp; Testing</h3>
+        <p>Prototype development, field testing, and iterative refinement under live operational conditions.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <h3>Certification &amp; Approval</h3>
+        <p>Compliance review against export control frameworks and client-nation procurement standards.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <h3>Production &amp; Fielding</h3>
+        <p>Full-rate production, delivery, and long-term sustainment support across the program's service life.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap cta-inner">
+    <h2>Looking for a program not listed here?</h2>
+    <p>Full program specifications are available to accredited government and institutional clients under standard non-disclosure terms.</p>
+    <a href="mailto:aegis.dynamics.co@gmail.com" class="btn btn-solid">Request Full Catalog</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <span>&copy; 1961–2026 AEGIS DYNAMICS. ALL RIGHTS RESERVED.</span>
+    <span>PRICING INDICATIVE — SUBJECT TO CONTRACT NEGOTIATION</span>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.filter-tag').forEach(function(tag){
+    tag.addEventListener('click', function(){
+      document.querySelectorAll('.filter-tag').forEach(function(t){ t.classList.remove('active'); });
+      tag.classList.add('active');
+      var chosen = tag.dataset.filter;
+      document.querySelectorAll('.prog-card').forEach(function(card){
+        if(chosen === 'All Programs' || card.dataset.category === chosen){
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
